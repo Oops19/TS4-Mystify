@@ -28,4 +28,8 @@ class ModInfo(CommonModInfo):
 
     @property
     def _version(self) -> str:
-        return '1.0.0'
+        return '1.2.0'
+
+'''
+v1.2.0 Inject into TS4 instead of S4CL reset method.
+'''

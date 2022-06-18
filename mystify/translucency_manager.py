@@ -2,13 +2,14 @@
 # LICENSE https://creativecommons.org/licenses/by/4.0/ https://creativecommons.org/licenses/by/4.0/legalcode
 # © 2022 https://github.com/Oops19
 #
+
+
 import time
 
+from objects.base_object import BaseObject
 from objects.client_object_mixin import ClientObjectMixin
 from objects.object_enums import ResetReason
 from mystify.modinfo import ModInfo
-
-from typing import Any
 
 from mystify.timer_store import TimerStore
 from mystify.translucency_store import TranslucencyStore
@@ -16,7 +17,7 @@ from sims.sim import Sim
 
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegistry
-from sims4communitylib.utils.sims.common_sim_spawn_utils import CommonSimSpawnUtils
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 log: CommonLog = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'TranslucencyManager')
 log.enable()
@@ -112,13 +113,14 @@ def o19_fade_opacity(original, self, opacity: float, duration: float, *args, **k
     original(self, opacity, duration, *args, **kwargs)
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), CommonSimSpawnUtils, CommonSimSpawnUtils.hard_reset.__name__)
-def o19_opacity_hard_reset(original, sim_info, reset_reason: ResetReason = ResetReason.RESET_EXPECTED, source: Any = None, cause: Any = 'S4CL Hard Reset', *args, **kwargs) -> bool:
-    log.debug(f'o19_opacity_hard_reset({sim_info}, {reset_reason}, {source}, {cause})')
-    rv = original(sim_info, reset_reason, source, cause, *args, **kwargs)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), BaseObject, BaseObject.reset.__name__)
+def o19_opacity_hard_reset(original, self, reset_reason: ResetReason = ResetReason.RESET_EXPECTED, source=None, cause=None, *args, **kwargs):
+    log.debug(f'o19_opacity_hard_reset({self}, {reset_reason}, {source}, {cause})')
+    rv = original(self, reset_reason, source, cause, *args, **kwargs)
     try:
-        sim = sim_info.get_sim_instance()
-        sim.fade_in()
+        sim: Sim = CommonSimUtils.get_sim_instance(self)
+        if sim:
+            sim.fade_in()
     except Exception as e:
         log.debug(f"Oops: '{e}'")
     return rv
