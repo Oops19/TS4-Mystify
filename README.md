@@ -3,7 +3,7 @@
 Mystify is a small mod which allows adding temporary transparency to sims and objects. The modifications are not persisted in a save game.
 
 * Everything between 30 and 100 % is quite safe to apply.
-* With 0 to 20 % opacity sims and objets are hard to see for the player and one can't click on them.
+* With 0 to 20 % opacity sims and objects are hard to see for the player and one can't click on them.
 * Sims will still interact with invisible sims and objects.
 
 The normal menu allows to set the opacity to 40, 60, 80 and 100 % (Show).
@@ -27,6 +27,9 @@ Download `sims4communitylib.v1.77.zip` (or higher) and extract sims4communitylib
 ## Compatibility
 This mod has been tested with 1.88.228 (2022-05-27) and S4CL v1.77 (2022-05-04).
 It is expected to work with many older and upcoming releases of TS4 and S4CL.
+
+### Versions
+v1.2 injecting directly into TS4 instead of S4CL.
 
 ### Future
 
