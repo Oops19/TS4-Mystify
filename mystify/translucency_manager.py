@@ -19,7 +19,7 @@ from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegistry, CommonMessageType
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
-log: CommonLog = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'TranslucencyManager')
+log: CommonLog = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 'TranslucencyManager')
 log.enable()
 
 

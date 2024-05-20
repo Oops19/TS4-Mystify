@@ -19,7 +19,7 @@ from interactions.context import InteractionContext
 from sims4communitylib.classes.interactions.common_immediate_super_interaction import CommonImmediateSuperInteraction
 from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegistry
 
-log: CommonLog = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'main')
+log: CommonLog = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 'main')
 log.enable()
 
 
