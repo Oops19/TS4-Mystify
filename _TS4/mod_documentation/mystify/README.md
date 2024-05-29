@@ -19,7 +19,7 @@ A 'TheVoid/Nothingness' class is planned. It should be triggered by transparent 
 # Addendum
 
 ## Game compatibility
-This mod has been tested with `The Sims 4` GAME_VERSION, S4CL S4CL_VERSION, TS4Lib 0.2.0 (2024-02).
+This mod has been tested with `The Sims 4` 1.107.112, S4CL 3.4, TS4Lib 0.3.20 (2024-05).
 It is expected to be compatible with many upcoming releases of TS4, S4CL and TS4Lib.
 
 ## Dependencies

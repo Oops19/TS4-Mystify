@@ -1,9 +1,7 @@
-# compile.sh version 2.0.15
+# compile.sh version 2.0.18
 
-# This file searches from the parent directory for 'modinfo.py' in it or in any sub directory.
+# This file searches from the parent directory for 'modinfo.py' in it or in any subdirectory.
 # Make sure to have only one 'modinfo.py' in your project directory. The first found 'modinfo.py' is used and loaded.
-#
-#
 
 # Folder structure:
 # PyCharm-Folder/_compile/compile.sh
@@ -22,12 +20,14 @@ from typing import Tuple, Dict, Any
 
 from Utilities.unpyc3_compiler import Unpyc3PythonCompiler
 
+
 additional_directories: Tuple = ()
 include_sources = False
 exclude_folders: Tuple = ()
 add_readme = True
 file_appendix = ''
 auto_beta = True
+exclude_dependencies = ()
 try:
     with open('compile.ini', 'rt') as fp:
         cfg: Dict[str, Any] = ast.literal_eval(fp.read())
@@ -37,18 +37,29 @@ try:
         add_readme = cfg.get('add_readme', add_readme)
         file_appendix = cfg.get('file_appendix', file_appendix)
         auto_beta = cfg.get('auto_beta', auto_beta)
+        exclude_dependencies = cfg.get('exclude_dependencies', exclude_dependencies)
 except:
     pass
 
 beta_appendix = "-beta"  # or "-test-build"
 
 modinfo_py = 'modinfo.py'
+init_py = '__init__.py'
+init = ''
 mi = None
 for root, dirs, files in os.walk('..'):
     if '.private' in root:
         continue
     if modinfo_py in files:
         modinfo = os.path.join(root, modinfo_py)
+        init = os.path.join(root, init_py)
+        if not os.path.exists(init):
+            print(f"Found '{modinfo}' but '{init}' is missing. Skipping folder!")
+            continue
+        else:
+            size = os.path.getsize(init)
+            if size > 0:
+                print(f"Size of '{init}' is {size}.")
         print(f"Using '{modinfo}' ...")
         try:
             sys.path.insert(1, root)
@@ -72,6 +83,18 @@ mod_name = mi._name
 mod_directory = mi._base_namespace
 version = mi._version  # All versions 0., x.1, x.3, x.5, x.7, x.9 (also x.1.y, x.1.y.z) will be considered beta and the 'beta_appendix' gets appended.
 
+try:
+    # S4CL_VERSION
+    s4cl_modinfo_py = os.path.join('..', '..', 'Libraries', 'sims4communitylib', 'modinfo.py')
+    with open(s4cl_modinfo_py, 'rt') as fp:
+        s4cl_version = fp.read()
+        s4cl_version = s4cl_version.replace('\r', ' ').replace('\n', ' ').replace('\t', ' ')
+        s4cl_version = re.sub(r' {2,}', ' ', s4cl_version)
+        s4cl_version = re.sub(r".*def _version.*return '([0-9.]*)'.*", r'\g<1>', s4cl_version)
+except Exception as e:
+    print(f"Error reading S4CL ({e}).")
+    exit(1)
+
 if add_readme:
     file_game_version = 'c:' + os.sep + os.path.join(os.environ['HOMEPATH'], 'Documents', 'Electronic Arts',
                                                      'The Sims 4', 'GameVersion.txt')
@@ -91,7 +114,11 @@ if add_readme:
                 for file_r in [file_readme, file_footer]:
                     with open(file_r, 'rb') as fp_r:
                         _data = fp_r.read()
-                        data = re.sub(r'1.103.315 .2023-12.', game_version, _data.decode('UTF-8'))
+                        data = re.sub(r'GAME_VERSION', game_version, _data.decode('UTF-8'))
+                        data = re.sub(r'S4CL_VERSION', s4cl_version, data)
+                        if exclude_dependencies:
+                            for e in exclude_dependencies:
+                                data = re.sub(f'. .{e}..[^)]*.\r\n', '', data)
                         fp_w.write(data.encode('UTF-8'))
         with open(gitignore, 'rt') as fp:
             if ".private" not in fp.read():
@@ -167,6 +194,14 @@ shutil.make_archive(os.path.join(release_directory, f"{zip_file_name}"), 'zip', 
 print(f'Created {os.path.join(release_directory, f"{zip_file_name}.zip")}')
 
 '''
+v2.0.18
+    Check for __init__.py and its size.
+v2.0.17
+    Support also longer S4CL version numbers '([0-9]*)' instead of '(.\..)'
+v2.0.16
+    Added exclude_dependencies to config.ini to be able to remove these.
+    Updated FOOTER.md with 'GAME_VERSION'
+    ../Libraries/sims4communitylib/modinfo.py
 v2.0.15
     Make a backup of the existing directory and create a full/new build
 v2.0.14
