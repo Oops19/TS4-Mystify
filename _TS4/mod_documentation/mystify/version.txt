@@ -1,5 +1,5 @@
-Mystify v1.2.4 for The Sims 4 v1.108.349 and S4CL v3.7
-Created on 2024-08-19
+Mystify v1.2.4 for The Sims 4 v1.109.185 and S4CL v3.7
+Created on 2024-10-08
 v1.2.4
     Tested with TS4 v1.107
 
