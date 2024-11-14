@@ -28,10 +28,14 @@ class ModInfo(CommonModInfo):
 
     @property
     def _version(self) -> str:
-        return '1.2.4'
+        return '1.2.6'
 
 
 r'''
+v1.2.6
+    Replace local TranslucencyManager with TS4-Library.OpacityManager
+v1.2.5
+    Show debug menu also for special situations
 v1.2.4
     Tested with TS4 v1.107
 v1.2.3
