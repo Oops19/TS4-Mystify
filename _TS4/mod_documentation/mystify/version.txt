@@ -1,5 +1,5 @@
 Mystify v1.2.6 for The Sims 4 v1.110.311 and S4CL v3.9
-Created on 2024-11-14
+Created on 2024-11-22
 v1.2.6
     Replace local TranslucencyManager with TS4-Library.OpacityManager
 
