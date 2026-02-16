@@ -28,10 +28,12 @@ class ModInfo(CommonModInfo):
 
     @property
     def _version(self) -> str:
-        return '1.2.6'
+        return '1.2.7'
 
 
 r'''
+v1.2.7
+    Update pie menu
 v1.2.6
     Replace local TranslucencyManager with TS4-Library.OpacityManager
 v1.2.5
